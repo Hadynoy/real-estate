@@ -14,7 +14,7 @@ const testimonials = [
     company: 'Tech Executive',
     quote:
       'Absolutely the best experience I\'ve had with a real estate team. They guided me from start to finish and made the process stress-free!',
-    image: '/src/assets/33.avif',
+    image: '/assets/33.avif',
     rating: 4,
   },
   {
@@ -23,7 +23,7 @@ const testimonials = [
     company: 'Real Estate Portfolio Manager',
     quote:
       'Professional, knowledgeable, and genuinely cared about helping me find the right investment. Highly recommend them.',
-    image: '/src/assets/34.avif',
+    image: '/assets/34.avif',
     rating: 4.5,
   },
   {
@@ -32,7 +32,7 @@ const testimonials = [
     company: 'Interior Designer',
     quote:
       'They truly care about their clients. They made the experience of buying my first home incredibly smooth and enjoyable.',
-    image: '/src/assets/35.avif',
+    image: '/assets/35.avif',
     rating: 5,
   },
   {
@@ -84,9 +84,9 @@ const CustomerTestimonial = () => {
 
             <div className="flex flex-col items-start gap-4 mb-8">
               <div className="flex -space-x-3">
-                <img src="/src/assets/img1.png" alt="avatar1" className="w-12 h-12 rounded-full border-2 border-white shadow-md" />
-                <img src="/src/assets/img2.png" alt="avatar2" className="w-12 h-12 rounded-full border-2 border-white shadow-md" />
-                <img src="/src/assets/img3.png" alt="avatar3" className="w-12 h-12 rounded-full border-2 border-white shadow-md" />
+                <img src="/assets/img1.png" alt="avatar1" className="w-12 h-12 rounded-full border-2 border-white shadow-md" />
+                <img src="/assets/img2.png" alt="avatar2" className="w-12 h-12 rounded-full border-2 border-white shadow-md" />
+                <img src="/assets/img3.png" alt="avatar3" className="w-12 h-12 rounded-full border-2 border-white shadow-md" />
                 <div className="w-12 h-12 rounded-full bg-[#d4af37] text-[#0a0f1c] flex items-center justify-center text-sm font-semibold border-2 border-white shadow-md">
                   +10k
                 </div>

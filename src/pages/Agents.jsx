@@ -12,13 +12,13 @@ const agents = [
   {
     id: 2,
     name: "Daniel Chukwuma",
-    role: "Estate Consultant",
+    role: "Realtor",
     image: "/assets/agent2.avif",
   },
   {
     id: 3,
-    name: "Aisha Bello",
-    role: "Realtor",
+    name: "Jade Benson",
+    role: "Estate Consultant",
     image: "/assets/agent3.avif",
   },
   {
@@ -29,13 +29,13 @@ const agents = [
   },
   {
     id: 5,
-    name: "Adaeze Nwachukwu",
+    name: "Chloe Raymond",
     role: "Sales Agent",
     image: "/assets/agent5.avif",
   },
   {
     id: 6,
-    name: "Tunde Akintola",
+    name: "Vivian Blake",
     role: "Real Estate Analyst",
     image: "/assets/agent6.avif",
   },

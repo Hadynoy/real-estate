@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Home } from 'lucide-react';
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 
 // Original members remain the same
 const originalMembers = [
   {
-    name: 'Jane Doe',
-    role: 'Founder & CEO',
-    image: '/assets/team-01.jpg',
+    name: 'Vivian Blake',
+    role: 'Real Estate Analyst',
+    image: '/assets/agent6.avif',
   },
   {
-    name: 'Michael Smith',
-    role: 'Senior Developer',
-    image: '/assets/team-02.jpg',
+    name: 'Chloe Raymond',
+    role: 'Sales Agent',
+    image: '/assets/agent5.avif',
   },
   {
-    name: 'Emily Johnson',
-    role: 'UI/UX Designer',
-    image: '/assets/team-03.jpg',
+    name: 'Jade Benson',
+    role: 'Estate Consultant',
+    image: '/assets/agent3.avif',
   },
 ];
 
@@ -142,26 +143,34 @@ const Team = () => {
         
         {/* View All Button with hover animation */}
         <div className="mt-16">
-          <button className="group relative overflow-hidden px-8 py-4 bg-transparent border-2 border-[#d4af37] text-white rounded-none font-serif text-lg tracking-wide transition-all duration-500">
-            <span className="absolute inset-0 bg-[#d4af37] transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></span>
-            <span className="relative z-10 group-hover:text-black flex items-center gap-2">
-              View Full Team
-              <motion.span
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <svg 
-                  className="w-5 h-5" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </motion.span>
-            </span>
-          </button>
-        </div>
+  <Link
+    to="/agents"
+    className="group relative overflow-hidden inline-block px-8 py-4 bg-transparent border-2 border-[#d4af37] text-white rounded-none font-serif text-lg tracking-wide transition-all duration-500"
+  >
+    <span className="absolute inset-0 bg-[#d4af37] transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></span>
+    <span className="relative z-10 group-hover:text-black flex items-center gap-2">
+      View Full Team
+      <motion.span
+        animate={{ x: [0, 5, 0] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      >
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M14 5l7 7m0 0l-7 7m7-7H3"
+          />
+        </svg>
+      </motion.span>
+    </span>
+  </Link>
+</div>
       </div>
     </section>
   );
