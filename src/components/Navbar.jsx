@@ -1,14 +1,12 @@
-// src/components/Navbar.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronDown, Search, Home } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { href, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // <-- use Link here
 import clsx from 'clsx';
 import SearchOverlay from './SearchOverlay';
 
 const navLinks = [
   { name: 'Home', href: '/' },
-
   {
     name: 'Properties',
     dropdown: [
@@ -16,12 +14,7 @@ const navLinks = [
       { name: 'Property List', href: '/propertylist' },
     ],
   },
-
-  {
-    name: 'Agents', href: '/agents',
-    
-  },
-
+  { name: 'Agents', href: '/agents' },
   {
     name: 'Pages',
     dropdown: [
@@ -32,11 +25,9 @@ const navLinks = [
       { name: '404 Page', href: '/not-found' },               
     ],
   },
-
   { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/contact' },
 ];
-
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -111,27 +102,27 @@ const Navbar = () => {
                         className="absolute top-full left-0 mt-2 bg-white text-[#0a0f1c] rounded-lg shadow-lg min-w-[200px] py-2 z-20 border border-gray-100"
                       >
                         {link.dropdown.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.href}  // <-- use Link here
                             className="block px-5 py-2.5 hover:bg-gray-50 text-sm tracking-wide transition-colors"
                           >
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
               ) : (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
+                  to={link.href}  // <-- use Link here
                   className="hover:text-[#d4af37] transition-colors duration-300 relative group"
                 >
                   {link.name}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#d4af37] group-hover:w-full transition-all duration-300"></span>
-                </a>
+                </Link>
               )
             )}
           </nav>
@@ -205,28 +196,28 @@ const Navbar = () => {
                             className="pl-4 mt-2 space-y-2"
                           >
                             {link.dropdown.map((item) => (
-                              <a
+                              <Link
                                 key={item.name}
-                                href={item.href}
+                                to={item.href}  // <-- use Link here
                                 className="block hover:text-[#d4af37] py-2 transition-colors"
                                 onClick={() => setMobileOpen(false)}
                               >
                                 {item.name}
-                              </a>
+                              </Link>
                             ))}
                           </motion.div>
                         )}
                       </AnimatePresence>
                     </div>
                   ) : (
-                    <a
+                    <Link
                       key={link.name}
-                      href={link.href}
+                      to={link.href}  // <-- use Link here
                       className="hover:text-[#d4af37] py-2 transition-colors"
                       onClick={() => setMobileOpen(false)}
                     >
                       {link.name}
-                    </a>
+                    </Link>
                   )
                 )}
 
