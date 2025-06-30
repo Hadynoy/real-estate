@@ -1,0 +1,54 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora&family=Cinzel:wght@700&family=Cormorant+Garamond:wght@500&family=Montserrat:wght@400;700&display=swap');
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+  }
+}
+
+@keyframes shineText {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 1.6s infinite ease-in-out;
+}
+
+.shine-text {
+  background: linear-gradient(90deg, #fff 0%, #ffcccc 50%, #fff 100%);
+  background-size: 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shineText 2s infinite linear;
+}
+
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, .fancy-heading {
+  font-family: 'DM Serif Display', serif;
+}
+/* For small / body text */
+body,
+p,
+span,
+label,
+button,
+input,
+textarea,
+.small-text {
+  font-family: 'Cormorant Garamond', serif;
+}
+
