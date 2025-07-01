@@ -16,7 +16,6 @@ const HeroSection = ({ loading }) => {
   const textRef = useRef();
   const isInView = useInView(textRef, { once: true });
   const navigate = useNavigate();
-  const videoRef = useRef(null);
 
   const handleScroll = useCallback(() => {
     setCategoryOpen(false);
@@ -27,12 +26,6 @@ const HeroSection = ({ loading }) => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
-
-  useEffect(() => {
-    if (!loading && videoRef.current) {
-      videoRef.current.play().catch((e) => console.log("Video play blocked:", e));
-    }
-  }, [loading]);
 
   const handleSearch = useCallback(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -74,15 +67,12 @@ const HeroSection = ({ loading }) => {
     >
       {/* Background Video */}
       <video
-        ref={videoRef}
-        autoPlay={false}
+        autoPlay
         loop
         muted
         playsInline
         preload="auto"
-        className={`fixed top-0 left-0 w-full h-full object-cover z-[-2] brightness-75 transition-opacity duration-700 ${
-          loading ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
+        className="fixed top-0 left-0 w-full h-full object-cover z-[-2] brightness-75"
       >
         <source src="/assets/1.mp4" type="video/mp4" />
         Your browser does not support the video tag.
