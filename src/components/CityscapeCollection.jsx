@@ -108,18 +108,19 @@ const CityscapeCollection = () => {
       </div>
 
       {/* Heading */}
-      <div className="flex flex-col items-center justify-center gap-4 mb-16">
-        <div className="flex items-center gap-4">
-          <span className="w-8 h-px bg-[#d4af37]"></span>
-          <Home size={20} className="text-[#d4af37] animate-pulse" />
-          <span className="text-sm tracking-[0.2em] uppercase text-[#d4af37] font-serif font-medium">
-            Cityscape Collection
-          </span>
-          <Home size={20} className="text-[#d4af37] animate-pulse" />
-          <span className="w-8 h-px bg-[#d4af37]"></span>
-        </div>
-        <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
-      </div>
+      <div className="flex flex-col items-center justify-center gap-4 mb-16 px-4">
+  <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-center">
+    <span className="w-8 h-px bg-[#d4af37]"></span>
+    <Home size={20} className="text-[#d4af37] animate-pulse" />
+    <span className="text-sm tracking-[0.2em] uppercase text-[#d4af37] font-serif font-medium whitespace-nowrap">
+      Cityscape Collection
+    </span>
+    <Home size={20} className="text-[#d4af37] animate-pulse" />
+    <span className="w-8 h-px bg-[#d4af37]"></span>
+  </div>
+  <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+</div>
+
 
       {/* Swiper */}
       <div className="relative">

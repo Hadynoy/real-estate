@@ -63,22 +63,35 @@ const PaginatedProperties = () => {
               className="group relative overflow-hidden rounded-[20px] shadow-lg hover:shadow-xl transition-all duration-500"
             >
               <div className="relative h-[320px] overflow-hidden">
-                <img
-                  src={property.image}
-                  alt={property.title}
-                  className="w-full h-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110"
-                />
+  {/* On small screens, make the image a link */}
+  <Link to={`/property/${property.id}`} className="block sm:hidden h-full">
+    <img
+      src={property.image}
+      alt={property.title}
+      className="w-full h-full object-cover"
+    />
+  </Link>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1c]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <Link to={`/property/${property.id}`}>
-                      <button className="w-full px-6 py-3 bg-[#d4af37] text-[#0a0f1c] rounded-full font-serif font-medium hover:bg-[#e6c55d] transition-colors">
-                        View Details
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
+  {/* On medium screens and up, hover effect with button */}
+  <div className="hidden sm:block h-full group">
+    <img
+      src={property.image}
+      alt={property.title}
+      className="w-full h-full object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110"
+    />
+
+    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1c]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      <div className="absolute bottom-0 left-0 right-0 p-6">
+        <Link to={`/property/${property.id}`}>
+          <button className="w-full px-6 py-3 bg-[#d4af37] text-[#0a0f1c] rounded-full font-serif font-medium hover:bg-[#e6c55d] transition-colors">
+            View Details
+          </button>
+        </Link>
+      </div>
+    </div>
+  </div>
+</div>
+
 
               <div className="p-6 bg-white">
                 <h3 className="text-xl font-serif font-bold text-[#0a0f1c] mb-2">

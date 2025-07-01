@@ -156,15 +156,18 @@ const Navbar = () => {
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className={clsx(
-                'md:hidden px-4 pb-6 overflow-hidden',
-                scrolled || !isHome ? 'bg-[#0a0f1c] text-white' : 'bg-transparent text-white'
-              )}
-            >
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className={clsx(
+              'md:hidden px-4 pb-6 overflow-hidden',
+              scrolled || !isHome
+                ? 'bg-[#0a0f1c] text-white'
+                : 'bg-[#0a0f1c]/90 text-white shadow-xl'
+            )}
+          >
+          
               <div className="flex flex-col space-y-4 pt-4 text-sm">
                 {navLinks.map((link) =>
                   link.dropdown ? (

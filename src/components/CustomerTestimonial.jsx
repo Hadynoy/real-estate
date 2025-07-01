@@ -63,15 +63,16 @@ const CustomerTestimonial = () => {
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           {/* Left Side */}
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="w-8 h-px bg-[#d4af37]"></span>
-              <Home size={18} className="text-[#d4af37] animate-pulse" />
-              <span className="text-sm tracking-[0.2em] uppercase text-[#d4af37] font-medium">
-                Customer Testimonial
-              </span>
-              <Home size={18} className="text-[#d4af37] animate-pulse" />
-              <span className="w-8 h-px bg-[#d4af37]"></span>
-            </div>
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 mb-6 text-center md:text-left">
+  <span className="w-8 h-px bg-[#d4af37]"></span>
+  <Home size={18} className="text-[#d4af37] animate-pulse" />
+  <span className="text-sm tracking-[0.2em] uppercase text-[#d4af37] font-medium whitespace-nowrap">
+    Customer Testimonial
+  </span>
+  <Home size={18} className="text-[#d4af37] animate-pulse" />
+  <span className="w-8 h-px bg-[#d4af37]"></span>
+</div>
+
 
             <h2 className="text-5xl md:text-6xl font-serif text-white mb-8 tracking-tight">
               Hear From Happy <br />
@@ -100,80 +101,105 @@ const CustomerTestimonial = () => {
 
           {/* Right Side - Testimonials */}
           <div className="flex-1">
-            <div className="w-full max-w-lg mx-auto">
-              <Swiper
-                modules={[Pagination, Autoplay, EffectCoverflow]}
-                effect="coverflow"
-                coverflowEffect={{
-                  rotate: 20,
-                  stretch: 0,
-                  depth: 120,
-                  modifier: 1,
-                  slideShadows: false,
-                }}
-                autoplay={{ delay: 6000, disableOnInteraction: false }}
-                pagination={{
-                  clickable: true,
-                  dynamicBullets: true,
-                }}
-                navigation={false} // ✅ disables Swiper default blue arrows
-                loop={true}
-                speed={1200}
-                spaceBetween={40}
-                slidesPerView={1}
-                breakpoints={{
-                  768: {
-                    slidesPerView: 1.2,
-                  },
-                }}
-              >
-                {testimonials.map((testimonial, index) => {
-                  const fullStars = Math.floor(testimonial.rating);
-                  const hasHalfStar = testimonial.rating % 1 !== 0;
-                  return (
-                    <SwiperSlide key={index}>
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
-                        className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-8 md:p-12 text-left border border-transparent hover:border-[#d4af37]/30 hover:shadow-xl hover:shadow-[#d4af37]/20 transition-all duration-500 ease-in-out"
-                      >
-                        <div className="flex gap-1.5 mb-6">
-                          {[...Array(5)].map((_, i) => {
-                            const starValue = i + 1;
-                            if (starValue <= fullStars) {
-                              return <Star key={`full-${i}`} size={20} fill="currentColor" stroke="none" className="text-[#d4af37]" />;
-                            } else if (starValue === Math.ceil(testimonial.rating) && hasHalfStar) {
-                              return <StarHalf key="half" size={20} fill="currentColor" stroke="none" className="text-[#d4af37]" />;
-                            } else {
-                              return <Star key={`empty-${i}`} size={20} fill="none" stroke="currentColor" className="text-gray-500" />;
-                            }
-                          })}
-                        </div>
+  <div className="w-full max-w-[95vw] sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto px-4">
+    <Swiper
+      modules={[Pagination, Autoplay, EffectCoverflow]}
+      effect="coverflow"
+      coverflowEffect={{
+        rotate: 20,
+        stretch: 0,
+        depth: 120,
+        modifier: 1,
+        slideShadows: false,
+      }}
+      autoplay={{ delay: 6000, disableOnInteraction: false }}
+      pagination={{
+        clickable: true,
+        dynamicBullets: true,
+      }}
+      navigation={false}
+      loop={true}
+      speed={1200}
+      spaceBetween={40}
+      slidesPerView={1}
+      breakpoints={{
+        768: {
+          slidesPerView: 1.2,
+        },
+      }}
+    >
+      {testimonials.map((testimonial, index) => {
+        const fullStars = Math.floor(testimonial.rating);
+        const hasHalfStar = testimonial.rating % 1 !== 0;
 
-                        <p className="text-base leading-relaxed text-white/80 mb-8 font-medium">
-                          "{testimonial.quote}"
-                        </p>
-
-                        <div className="flex items-center gap-5">
-                          <img
-                            src={testimonial.image}
-                            alt={testimonial.name}
-                            className="w-16 h-16 rounded-full object-cover border-2 border-[#d4af37] shadow-md"
-                          />
-                          <div>
-                            <h3 className="font-bold text-lg text-white">{testimonial.name}</h3>
-                            <p className="text-sm text-gray-400">{testimonial.role}</p>
-                            <p className="text-xs text-gray-500 mt-0.5">{testimonial.company}</p>
-                          </div>
-                        </div>
-
-                        <div className="absolute bottom-0 right-0 w-20 h-20 bg-[#d4af37]/10 rounded-tl-full"></div>
-                      </motion.div>
-                    </SwiperSlide>
-                  );
+        return (
+          <SwiperSlide key={index}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
+              className="relative bg-white/10 backdrop-blur-lg rounded-2xl p-6 sm:p-8 md:p-12 text-left border border-transparent hover:border-[#d4af37]/30 hover:shadow-xl hover:shadow-[#d4af37]/20 transition-all duration-500 ease-in-out"
+            >
+              <div className="flex gap-1.5 mb-6">
+                {[...Array(5)].map((_, i) => {
+                  const starValue = i + 1;
+                  if (starValue <= fullStars) {
+                    return (
+                      <Star
+                        key={`full-${i}`}
+                        size={20}
+                        fill="currentColor"
+                        stroke="none"
+                        className="text-[#d4af37]"
+                      />
+                    );
+                  } else if (starValue === Math.ceil(testimonial.rating) && hasHalfStar) {
+                    return (
+                      <StarHalf
+                        key="half"
+                        size={20}
+                        fill="currentColor"
+                        stroke="none"
+                        className="text-[#d4af37]"
+                      />
+                    );
+                  } else {
+                    return (
+                      <Star
+                        key={`empty-${i}`}
+                        size={20}
+                        fill="none"
+                        stroke="currentColor"
+                        className="text-gray-500"
+                      />
+                    );
+                  }
                 })}
-              </Swiper>
+              </div>
+
+              <p className="text-base leading-relaxed text-white/80 mb-8 font-medium">
+                "{testimonial.quote}"
+              </p>
+
+              <div className="flex items-center gap-5">
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-[#d4af37] shadow-md"
+                />
+                <div>
+                  <h3 className="font-bold text-lg text-white">{testimonial.name}</h3>
+                  <p className="text-sm text-gray-400">{testimonial.role}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{testimonial.company}</p>
+                </div>
+              </div>
+
+              <div className="absolute bottom-0 right-0 w-20 h-20 bg-[#d4af37]/10 rounded-tl-full"></div>
+            </motion.div>
+          </SwiperSlide>
+        );
+      })}
+    </Swiper>
 
               {/* Your own nav buttons — these won't function unless wired up */}
               <div className="flex justify-center mt-8 gap-4">

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Search, ChevronDown } from "lucide-react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import  properties  from "../data/properties"; // Adjust path to your actual file
 
 const HeroSection = () => {
   const [activeTab, setActiveTab] = useState("General");
@@ -8,20 +10,31 @@ const HeroSection = () => {
   const [locationOpen, setLocationOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Select Category");
   const [selectedLocation, setSelectedLocation] = useState("Select Location");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const textRef = useRef();
   const isInView = useInView(textRef, { once: true });
+  const navigate = useNavigate();
 
-  // 🔁 Close dropdowns on scroll
   useEffect(() => {
     const handleScroll = () => {
       setCategoryOpen(false);
       setLocationOpen(false);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSearch = () => {
+    const query = searchQuery.toLowerCase();
+    const filtered = properties.filter(
+      (property) =>
+        property.title.toLowerCase().includes(query) ||
+        property.location.toLowerCase().includes(query)
+    );
+    setSearchResults(filtered);
+  };
 
   return (
     <section
@@ -46,8 +59,8 @@ const HeroSection = () => {
           background: [
             "radial-gradient(circle, rgba(10,15,28,0.85) 0%, rgba(10,15,28,0.95) 100%)",
             "radial-gradient(circle, rgba(10,15,28,0.9) 0%, rgba(10,15,28,0.98) 100%)",
-            "radial-gradient(circle, rgba(10,15,28,0.85) 0%, rgba(10,15,28,0.95) 100%)"
-          ]
+            "radial-gradient(circle, rgba(10,15,28,0.85) 0%, rgba(10,15,28,0.95) 100%)",
+          ],
         }}
         transition={{ duration: 5, repeat: Infinity }}
         className="fixed inset-0 z-[-1]"
@@ -101,7 +114,7 @@ const HeroSection = () => {
       >
         <div className="max-w-6xl mx-auto bg-white/10 backdrop-blur-xl border border-[#d4af37]/30 rounded-xl p-6 shadow-lg overflow-visible">
           {/* Tabs */}
-          <div className="flex justify-center gap-4 mb-8 text-sm font-serif">
+          <div className="flex justify-center gap-4 mb-8 text-sm font-serif flex-wrap">
             {["General", "Villa", "Apartment"].map((tab) => (
               <button
                 key={tab}
@@ -129,70 +142,79 @@ const HeroSection = () => {
             {/* Keyword */}
             <div className="flex flex-col">
               <label className="mb-2 text-white/60 text-sm font-serif">Keyword</label>
-              <div className="px-4 py-3 text-white/90 bg-transparent border-b border-white/20 focus-within:border-[#d4af37] transition-colors">
-                Looking For?
-              </div>
+              <input
+                type="text"
+                placeholder="Looking For?"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="px-4 py-3 text-white/90 bg-transparent border-b border-white/20 focus:outline-none focus:border-[#d4af37] placeholder:text-white/50 transition-colors"
+              />
             </div>
 
             {/* Dropdowns */}
             {[
               {
-                state: categoryOpen,
-                setState: setCategoryOpen,
-                label: "Category",
+                open: categoryOpen,
+                setOpen: setCategoryOpen,
                 selected: selectedCategory,
-                options: ["Apartment", "Villa", "Office"]
+                setSelected: setSelectedCategory,
+                label: "Category",
+                options: ["Apartment", "Villa", "Office"],
               },
               {
-                state: locationOpen,
-                setState: setLocationOpen,
-                label: "Location",
+                open: locationOpen,
+                setOpen: setLocationOpen,
                 selected: selectedLocation,
-                options: ["Lagos", "Abuja", "Port Harcourt"]
-              }
+                setSelected: setSelectedLocation,
+                label: "Location",
+                options: ["Lagos", "Abuja", "Port Harcourt"],
+              },
             ].map((dropdown, i) => (
-              <div key={i} className="flex flex-col relative z-20 overflow-visible">
-                <label className="mb-2 text-white/60 text-sm font-serif">
-                  {dropdown.label}
-                </label>
+              <div key={i} className="flex flex-col w-full relative z-10">
+                <label className="mb-2 text-white/60 text-sm font-serif">{dropdown.label}</label>
                 <button
-                  onClick={() => dropdown.setState(!dropdown.state)}
+                  onClick={() => {
+                    setCategoryOpen(false);
+                    setLocationOpen(false);
+                    dropdown.setOpen(!dropdown.open);
+                  }}
                   className="w-full flex justify-between items-center px-4 py-3 rounded bg-transparent text-white border border-white/20 hover:border-[#d4af37] transition-colors"
                 >
                   <span className="text-white/70">{dropdown.selected}</span>
                   <ChevronDown
                     size={16}
                     className={
-                      dropdown.state
+                      dropdown.open
                         ? "rotate-180 text-[#d4af37]"
                         : "text-white/70"
                     }
                   />
                 </button>
 
-                {dropdown.state && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full left-0 mt-2 w-full bg-white text-[#0a0f1c] rounded shadow-lg z-50"
-                  >
-                    {dropdown.options.map((item) => (
-                      <button
-                        key={item}
-                        onClick={() => {
-                          dropdown.label === "Category"
-                            ? setSelectedCategory(item)
-                            : setSelectedLocation(item);
-                          dropdown.setState(false);
-                        }}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
-                      >
-                        {item}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
+                <AnimatePresence>
+                  {dropdown.open && (
+                    <motion.div
+                      initial={{ opacity: 0, scaleY: 0.95 }}
+                      animate={{ opacity: 1, scaleY: 1 }}
+                      exit={{ opacity: 0, scaleY: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="mt-2 bg-white text-[#0a0f1c] rounded shadow-lg border border-gray-200 origin-top w-full max-h-48 overflow-y-auto"
+                    >
+                      {dropdown.options.map((item) => (
+                        <button
+                          key={item}
+                          onClick={() => {
+                            dropdown.setSelected(item);
+                            dropdown.setOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
 
@@ -201,16 +223,40 @@ const HeroSection = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleSearch}
                 className="group w-full flex items-center justify-center gap-3 px-6 py-3 text-[#0a0f1c] font-serif font-medium rounded-full overflow-hidden relative bg-[#d4af37]"
               >
                 <span className="absolute inset-0 bg-[#0a0f1c] transition-transform duration-300 transform translate-y-full group-hover:translate-y-0 z-0"></span>
                 <span className="relative z-10 flex items-center gap-2 group-hover:text-white">
-                  <Search size={18} className="group-hover:rotate-12 transition-transform" />{" "}
+                  <Search size={18} className="group-hover:rotate-12 transition-transform" />
                   SEARCH
                 </span>
               </motion.button>
             </div>
           </div>
+
+          {/* Search Results */}
+          <AnimatePresence>
+            {searchResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="mt-6 bg-white text-[#0a0f1c] rounded-lg shadow-lg p-4 max-h-64 overflow-y-auto"
+              >
+                {searchResults.map((property) => (
+                  <button
+                    key={property.id}
+                    onClick={() => navigate(`/property/${property.id}`)}
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                  >
+                    {property.title} - {property.location}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
     </section>
