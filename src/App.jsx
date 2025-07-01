@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
-import Preloader from './components/Preloader';
+import Preloader from './components/Preloader'; // ✅ import
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -34,7 +34,7 @@ const App = () => {
       <ScrollToTop />
       <Routes>
         {/* Home */}
-        <Route path="/" element={<Layout><HomePage loading={loading} /></Layout>} />
+        <Route path="/" element={<Layout><HomePage /></Layout>} />
 
         {/* Properties */}
         <Route path="/properties" element={<Layout><AllProperties /></Layout>} />

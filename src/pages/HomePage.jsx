@@ -11,10 +11,12 @@ import Banner from '../components/Banner';
 import CustomerTestimonial from '../components/CustomerTestimonial';
 import Contact from '../components/Contact';
 
-const HomePage = ({ loading }) => {
+
+const HomePage = () => {
   return (
     <>
-      <HeroSection loading={loading} />
+      
+      <HeroSection />
       <HighlightSection />
       <RealEstateSection />
       <CityscapeCollection />
@@ -23,6 +25,7 @@ const HomePage = ({ loading }) => {
       <Banner />
       <CustomerTestimonial />
       <Contact />
+      
     </>
   );
 };
