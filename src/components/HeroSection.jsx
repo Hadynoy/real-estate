@@ -4,7 +4,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import properties from "../data/properties";
 
-const HeroSection = () => {
+const HeroSection = ({ loading }) => {
   const [activeTab, setActiveTab] = useState("General");
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -17,7 +17,6 @@ const HeroSection = () => {
   const isInView = useInView(textRef, { once: true });
   const navigate = useNavigate();
 
-  // useCallback to memoize the handler and avoid re-adding event listeners unnecessarily
   const handleScroll = useCallback(() => {
     setCategoryOpen(false);
     setLocationOpen(false);
@@ -28,7 +27,6 @@ const HeroSection = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // memoized search to avoid re-filtering on every render
   const handleSearch = useCallback(() => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) {
@@ -43,7 +41,6 @@ const HeroSection = () => {
     setSearchResults(filtered);
   }, [searchQuery]);
 
-  // Memoized dropdown configs to avoid re-creating array each render
   const dropdowns = [
     {
       open: categoryOpen,
@@ -69,16 +66,18 @@ const HeroSection = () => {
       className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center text-white pt-40 pb-20 font-sans overflow-visible"
     >
       {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="fixed top-0 left-0 w-full h-full object-cover z-[-2] brightness-75"
-      >
-        <source src="/assets/1.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {!loading && (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="fixed top-0 left-0 w-full h-full object-cover z-[-2] brightness-75"
+        >
+          <source src="/assets/1.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      )}
 
       {/* Animated Overlay */}
       <motion.div
