@@ -15,18 +15,13 @@ const navLinks = [
     ],
   },
   { name: 'Agents', href: '/agents' },
-  {
-    name: 'Pages',
-    dropdown: [
-      { name: 'About Us', href: '/about' },
-      { name: 'Our Services', href: '/services' },
-      { name: 'Our Projects', href: '/projects' },
-      { name: 'Registration', href: '/register' },
-      { name: '404 Page', href: '/not-found' },               
-    ],
-  },
   { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/contact' },
+  {
+    name: 'About Us', href: '/about'
+  },
+
+
 ];
 
 const Navbar = () => {
@@ -67,9 +62,12 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-5 flex items-center justify-between">
           {/* Brand */}
-          <div className="text-2xl font-serif font-bold tracking-widest uppercase">
+          <Link
+            to="/"
+            className="text-2xl font-serif font-bold tracking-widest uppercase hover:opacity-90 transition"
+          >
             <span className="text-[#d4af37]">Urban</span>Nest
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-x-10 text-sm font-medium tracking-wide">
