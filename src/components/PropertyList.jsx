@@ -19,7 +19,10 @@ const PropertyList = () => {
   const bottomProperties = [...properties.slice(3, 7), ...properties.slice(3, 7)];
 
   const renderCard = (item, i) => (
-    <div className="relative rounded-xl overflow-hidden shadow-md border border-gray-200 mx-2 group transition-transform duration-500 group-hover:scale-[1.03]">
+    <div
+      className="relative rounded-xl overflow-hidden shadow-md border border-gray-200 mx-2 group transition-transform duration-500 group-hover:scale-[1.03]"
+      key={i}
+    >
       {/* Hot badge */}
       {item.hot && (
         <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow-lg z-10 pulse-glow shine-text">
@@ -49,11 +52,19 @@ const PropertyList = () => {
           pointer-events-none
         "
       >
-        <div className="text-lg font-semibold group-hover:text-[#0a0f1c] transition-colors duration-300">{item.count} Properties</div>
-        <div className="text-sm text-green-300 group-hover:text-[#0a0f1c] transition-colors duration-300">{item.location}</div>
+        <div className="text-lg font-semibold group-hover:text-[#0a0f1c] transition-colors duration-300">
+          {item.count} Properties
+        </div>
+        <div className="text-sm text-green-300 group-hover:text-[#0a0f1c] transition-colors duration-300">
+          {item.location}
+        </div>
         <button className="mt-2 flex items-center gap-2 bg-transparent border border-[#d4af37] hover:bg-[#d4af37] hover:text-[#1a2a44] px-4 py-1 rounded-full text-sm font-semibold transition-colors pointer-events-auto">
-          <span className="group-hover:tracking-wider transition-all duration-300">View Details</span>{" "}
-          <span className="text-green-300 group-hover:text-[#1a2a44] transition-colors duration-300">↑</span>
+          <span className="group-hover:tracking-wider transition-all duration-300">
+            View Details
+          </span>{" "}
+          <span className="text-green-300 group-hover:text-[#1a2a44] transition-colors duration-300">
+            ↑
+          </span>
         </button>
       </div>
     </div>
@@ -64,13 +75,13 @@ const PropertyList = () => {
       {/* 💡 Glowing Background */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         {/* Top-left glow */}
-        <div className="absolute top-[-120px] left-[-100px] w-[500px] h-[500px] bg-green-300 rounded-full blur-[160px] opacity-20"></div>
+        <div className="absolute top-[-120px] left-[-100px] w-[500px] h-[500px] bg-green-300 rounded-full blur-[160px] opacity-20" />
 
         {/* Bottom-right glow */}
-        <div className="absolute bottom-[-100px] right-[-150px] w-[600px] h-[600px] bg-amber-300 rounded-full blur-[200px] opacity-10"></div>
+        <div className="absolute bottom-[-100px] right-[-150px] w-[600px] h-[600px] bg-amber-300 rounded-full blur-[200px] opacity-10" />
 
         {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-green-50 via-white to-amber-50 opacity-30"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-green-50 via-white to-amber-50 opacity-30" />
       </div>
 
       {/* Top Swiper sliding LEFT */}
@@ -79,7 +90,7 @@ const PropertyList = () => {
           modules={[Autoplay]}
           slidesPerView={3}
           spaceBetween={0}
-          loop={true}
+          loop
           speed={1200}
           autoplay={{
             delay: 2000,
@@ -99,7 +110,7 @@ const PropertyList = () => {
           modules={[Autoplay]}
           slidesPerView={4}
           spaceBetween={0}
-          loop={true}
+          loop
           speed={1200}
           autoplay={{
             delay: 2000,

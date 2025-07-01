@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   Home,
@@ -70,17 +70,21 @@ const properties = [
 
 const CityscapeCollection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+  const [navigationPrevEl, setNavigationPrevEl] = useState(null);
+  const [navigationNextEl, setNavigationNextEl] = useState(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (prevRef.current && nextRef.current) {
-        prevRef.current.classList.remove("swiper-button-disabled");
-        nextRef.current.classList.remove("swiper-button-disabled");
+  // This ensures swiper attaches the buttons once refs are set
+  const onSwiperInit = useCallback(
+    (swiper) => {
+      if (navigationPrevEl && navigationNextEl) {
+        swiper.params.navigation.prevEl = navigationPrevEl;
+        swiper.params.navigation.nextEl = navigationNextEl;
+        swiper.navigation.init();
+        swiper.navigation.update();
       }
-    }, 100);
-  }, []);
+    },
+    [navigationPrevEl, navigationNextEl]
+  );
 
   return (
     <section className="relative bg-[#0a0f1c] text-white py-32 overflow-hidden">
@@ -103,24 +107,23 @@ const CityscapeCollection = () => {
 
       {/* Background Glows */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-[#d4af37]/10 rounded-full blur-[150px] opacity-20"></div>
-        <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] bg-[#d4af37]/5 rounded-full blur-[200px] opacity-10"></div>
+        <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-[#d4af37]/10 rounded-full blur-[150px] opacity-20" />
+        <div className="absolute bottom-[-100px] right-[-100px] w-[500px] h-[500px] bg-[#d4af37]/5 rounded-full blur-[200px] opacity-10" />
       </div>
 
       {/* Heading */}
       <div className="flex flex-col items-center justify-center gap-4 mb-16 px-4">
-  <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-center">
-    <span className="w-8 h-px bg-[#d4af37]"></span>
-    <Home size={20} className="text-[#d4af37] animate-pulse" />
-    <span className="text-sm tracking-[0.2em] uppercase text-[#d4af37] font-serif font-medium whitespace-nowrap">
-      Cityscape Collection
-    </span>
-    <Home size={20} className="text-[#d4af37] animate-pulse" />
-    <span className="w-8 h-px bg-[#d4af37]"></span>
-  </div>
-  <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
-</div>
-
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-center">
+          <span className="w-8 h-px bg-[#d4af37]" />
+          <Home size={20} className="text-[#d4af37] animate-pulse" />
+          <span className="text-sm tracking-[0.2em] uppercase text-[#d4af37] font-serif font-medium whitespace-nowrap">
+            Cityscape Collection
+          </span>
+          <Home size={20} className="text-[#d4af37] animate-pulse" />
+          <span className="w-8 h-px bg-[#d4af37]" />
+        </div>
+        <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+      </div>
 
       {/* Swiper */}
       <div className="relative">
@@ -134,25 +137,22 @@ const CityscapeCollection = () => {
             1024: { slidesPerView: 3 },
             1280: { slidesPerView: 4 },
           }}
-          loop={true}
+          loop
           speed={1200}
           autoplay={{ delay: 4000, disableOnInteraction: false }}
-          navigation={{
-            prevEl: prevRef.current,
-            nextEl: nextRef.current,
-          }}
+          navigation={{ prevEl: navigationPrevEl, nextEl: navigationNextEl }}
           pagination={{
             clickable: true,
             dynamicBullets: true,
-            renderBullet: (index, className) => {
-              return `<span class="${className} custom-bullet"></span>`;
-            },
+            renderBullet: (index, className) =>
+              `<span class="${className} custom-bullet"></span>`,
           }}
           onActiveIndexChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          onSwiper={onSwiperInit}
           className="px-4"
         >
-          {properties.map((item, i) => (
-            <SwiperSlide key={i}>
+          {properties.map((item) => (
+            <SwiperSlide key={item.id}>
               <div className="bg-[#1a2a44]/30 backdrop-blur-lg rounded-2xl overflow-hidden shadow-lg border border-[#d4af37]/20 group transition-all duration-500 hover:shadow-xl hover:border-[#d4af37]/40">
                 <div className="relative overflow-hidden">
                   <div className="absolute top-3 right-3 bg-[#d4af37] text-[#0a0f1c] text-xs font-serif font-semibold px-4 py-1.5 rounded-full shadow-md z-10">
@@ -162,8 +162,10 @@ const CityscapeCollection = () => {
                     src={item.image}
                     alt={item.name}
                     className="w-full h-64 object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1c]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1c]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-serif font-semibold mb-1.5">{item.name}</h3>
@@ -194,16 +196,18 @@ const CityscapeCollection = () => {
         {/* Custom arrows */}
         <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
           <button
-            ref={prevRef}
+            ref={setNavigationPrevEl}
             className="group flex items-center justify-center w-12 h-12 rounded-full bg-[#1a2a44]/50 hover:bg-[#1a2a44] transition-colors"
+            aria-label="Previous slide"
           >
             <ArrowLeft size={20} className="text-white group-hover:text-[#d4af37]" />
           </button>
         </div>
         <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
           <button
-            ref={nextRef}
+            ref={setNavigationNextEl}
             className="group flex items-center justify-center w-12 h-12 rounded-full bg-[#1a2a44]/50 hover:bg-[#1a2a44] transition-colors"
+            aria-label="Next slide"
           >
             <ArrowRight size={20} className="text-white group-hover:text-[#d4af37]" />
           </button>

@@ -16,7 +16,7 @@ import {
 const PropertyDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const property = properties.find((item) => item.id === parseInt(id));
+  const property = properties.find((item) => item.id === +id);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const imageRef = useRef();
   const isImageInView = useInView(imageRef, { once: true });
@@ -31,7 +31,6 @@ const PropertyDetails = () => {
 
   return (
     <section className="relative max-w-7xl mx-auto px-4 py-32">
-      {/* Back Button */}
       <div className="mb-8">
         <button
           onClick={() => navigate(-1)}
@@ -43,7 +42,6 @@ const PropertyDetails = () => {
       </div>
 
       <div className="grid lg:grid-cols-5 gap-12">
-        {/* Image Section */}
         <motion.div
           ref={imageRef}
           initial={{ opacity: 0, x: -30 }}
@@ -51,35 +49,33 @@ const PropertyDetails = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="lg:col-span-3 relative group"
         >
-          {/* Luxury Frame Effect */}
-          <div className="absolute -inset-0.5 bg-[#d4af37]/20 rounded-xl -z-10 group-hover:scale-105 transition-transform duration-500"></div>
-
+          <div className="absolute -inset-0.5 bg-[#d4af37]/20 rounded-xl -z-10 group-hover:scale-105 transition-transform duration-500" />
           <div className="relative overflow-hidden rounded-xl">
             <img
               src={property.image}
               alt={property.title}
               className="w-full h-[500px] object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
               onLoad={() => setIsImageLoaded(true)}
+              loading="eager"
             />
             {!isImageLoaded && (
-              <div className="absolute inset-0 bg-gray-100 animate-pulse"></div>
+              <div className="absolute inset-0 bg-gray-100 animate-pulse" />
             )}
           </div>
 
-          {/* Property Badge */}
           <div className="absolute top-4 right-4 w-12 h-12 bg-[#d4af37]/20 rounded-full flex items-center justify-center">
             <span className="text-2xl text-[#d4af37]">★</span>
           </div>
 
-          {/* Interior Gallery */}
-          {property.interiorImages && property.interiorImages.length > 0 && (
+          {property.interiorImages?.length > 0 && (
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {property.interiorImages.map((img, index) => (
-                <div key={index} className="overflow-hidden rounded-xl">
+              {property.interiorImages.map((img, i) => (
+                <div key={i} className="overflow-hidden rounded-xl">
                   <img
                     src={img}
-                    alt={`Interior ${index + 1}`}
+                    alt={`Interior ${i + 1}`}
                     className="w-full h-60 object-cover hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
                   />
                 </div>
               ))}
@@ -87,14 +83,12 @@ const PropertyDetails = () => {
           )}
         </motion.div>
 
-        {/* Details Section */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={isImageInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="lg:col-span-2 space-y-10"
         >
-          {/* Property Header */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-[#d4af37]">
               <Home size={18} className="animate-pulse" />
@@ -108,18 +102,15 @@ const PropertyDetails = () => {
             </h1>
 
             <p className="text-base text-gray-500 flex items-center gap-2">
-              <span className="inline-block w-4 h-0.5 bg-[#d4af37]"></span>
+              <span className="inline-block w-4 h-0.5 bg-[#d4af37]" />
               {property.location}
             </p>
           </div>
 
-          {/* Price & Specs */}
           <div className="space-y-6">
             <div className="text-3xl font-serif font-bold text-[#d4af37]">
               {property.price}
-              <span className="text-sm font-normal text-gray-500 ml-2">
-                / Asking
-              </span>
+              <span className="text-sm font-normal text-gray-500 ml-2">/ Asking</span>
             </div>
 
             <div className="flex flex-wrap gap-6 text-sm text-[#0a0f1c]">
@@ -138,26 +129,20 @@ const PropertyDetails = () => {
             </div>
           </div>
 
-          {/* Property Description */}
           <div className="pt-6 border-t border-[#0a0f1c]/10">
-            <h3 className="text-lg font-serif font-medium text-[#0a0f1c] mb-4">
-              Property Details
-            </h3>
+            <h3 className="text-lg font-serif font-medium text-[#0a0f1c] mb-4">Property Details</h3>
             <p className="text-base text-gray-600 leading-relaxed">
               {property.description}
             </p>
           </div>
 
-          {/* Agent Section */}
           <div className="mt-12 border-t border-[#0a0f1c]/10 pt-10">
-            <h3 className="text-xl font-serif font-semibold text-[#0a0f1c] mb-6">
-              Meet Your Agent
-            </h3>
+            <h3 className="text-xl font-serif font-semibold text-[#0a0f1c] mb-6">Meet Your Agent</h3>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <img
                 src={property.agent?.image || "/src/assets/agent-placeholder.jpg"}
-                alt={property.agent?.name || "Agent Name"}
+                alt={property.agent?.name || "Agent"}
                 className="w-24 h-24 object-cover rounded-full border-4 border-[#d4af37]/30"
               />
 
@@ -181,7 +166,6 @@ const PropertyDetails = () => {
             </div>
           </div>
 
-          {/* CTA Button */}
           <button className="w-full px-6 py-4 bg-[#d4af37] text-[#0a0f1c] font-serif font-medium rounded-none hover:bg-[#e6c55d] transition-colors flex items-center justify-center gap-2">
             <Phone size={18} />
             Contact Agent

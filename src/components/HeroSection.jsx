@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import  properties  from "../data/properties"; // Adjust path to your actual file
+import properties from "../data/properties";
 
 const HeroSection = () => {
   const [activeTab, setActiveTab] = useState("General");
@@ -17,24 +17,51 @@ const HeroSection = () => {
   const isInView = useInView(textRef, { once: true });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setCategoryOpen(false);
-      setLocationOpen(false);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  // useCallback to memoize the handler and avoid re-adding event listeners unnecessarily
+  const handleScroll = useCallback(() => {
+    setCategoryOpen(false);
+    setLocationOpen(false);
   }, []);
 
-  const handleSearch = () => {
-    const query = searchQuery.toLowerCase();
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  // memoized search to avoid re-filtering on every render
+  const handleSearch = useCallback(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      setSearchResults([]);
+      return;
+    }
     const filtered = properties.filter(
       (property) =>
         property.title.toLowerCase().includes(query) ||
         property.location.toLowerCase().includes(query)
     );
     setSearchResults(filtered);
-  };
+  }, [searchQuery]);
+
+  // Memoized dropdown configs to avoid re-creating array each render
+  const dropdowns = [
+    {
+      open: categoryOpen,
+      setOpen: setCategoryOpen,
+      selected: selectedCategory,
+      setSelected: setSelectedCategory,
+      label: "Category",
+      options: ["Apartment", "Villa", "Office"],
+    },
+    {
+      open: locationOpen,
+      setOpen: setLocationOpen,
+      selected: selectedLocation,
+      setSelected: setSelectedLocation,
+      label: "Location",
+      options: ["Lagos", "Abuja", "Port Harcourt"],
+    },
+  ];
 
   return (
     <section
@@ -62,7 +89,7 @@ const HeroSection = () => {
             "radial-gradient(circle, rgba(10,15,28,0.85) 0%, rgba(10,15,28,0.95) 100%)",
           ],
         }}
-        transition={{ duration: 5, repeat: Infinity }}
+        transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
         className="fixed inset-0 z-[-1]"
       />
 
@@ -74,11 +101,9 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="flex items-center gap-3 mb-4 text-[#d4af37] font-serif font-medium tracking-widest text-sm uppercase"
         >
-          <span className="inline-block w-8 h-0.5 bg-[#d4af37]"></span>
-          <span className="animate-pulse tracking-[0.2em]">
-            SEARCH SMART. LIVE SMART
-          </span>
-          <span className="inline-block w-8 h-0.5 bg-[#d4af37]"></span>
+          <span className="inline-block w-8 h-0.5 bg-[#d4af37]" />
+          <span className="animate-pulse tracking-[0.2em]">SEARCH SMART. LIVE SMART</span>
+          <span className="inline-block w-8 h-0.5 bg-[#d4af37]" />
         </motion.div>
 
         <motion.h1
@@ -124,6 +149,7 @@ const HeroSection = () => {
                     ? "bg-[#d4af37] text-[#0a0f1c] shadow-md"
                     : "bg-transparent text-white hover:bg-[#d4af37]/20"
                 }`}
+                type="button"
               >
                 {activeTab === tab && (
                   <motion.div
@@ -141,8 +167,11 @@ const HeroSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-20 overflow-visible">
             {/* Keyword */}
             <div className="flex flex-col">
-              <label className="mb-2 text-white/60 text-sm font-serif">Keyword</label>
+              <label className="mb-2 text-white/60 text-sm font-serif" htmlFor="keyword-input">
+                Keyword
+              </label>
               <input
+                id="keyword-input"
                 type="text"
                 placeholder="Looking For?"
                 value={searchQuery}
@@ -152,41 +181,32 @@ const HeroSection = () => {
             </div>
 
             {/* Dropdowns */}
-            {[
-              {
-                open: categoryOpen,
-                setOpen: setCategoryOpen,
-                selected: selectedCategory,
-                setSelected: setSelectedCategory,
-                label: "Category",
-                options: ["Apartment", "Villa", "Office"],
-              },
-              {
-                open: locationOpen,
-                setOpen: setLocationOpen,
-                selected: selectedLocation,
-                setSelected: setSelectedLocation,
-                label: "Location",
-                options: ["Lagos", "Abuja", "Port Harcourt"],
-              },
-            ].map((dropdown, i) => (
+            {dropdowns.map((dropdown, i) => (
               <div key={i} className="flex flex-col w-full relative z-10">
-                <label className="mb-2 text-white/60 text-sm font-serif">{dropdown.label}</label>
+                <label
+                  className="mb-2 text-white/60 text-sm font-serif"
+                  htmlFor={`dropdown-${dropdown.label.toLowerCase()}`}
+                >
+                  {dropdown.label}
+                </label>
                 <button
+                  id={`dropdown-${dropdown.label.toLowerCase()}`}
+                  type="button"
                   onClick={() => {
                     setCategoryOpen(false);
                     setLocationOpen(false);
                     dropdown.setOpen(!dropdown.open);
                   }}
                   className="w-full flex justify-between items-center px-4 py-3 rounded bg-transparent text-white border border-white/20 hover:border-[#d4af37] transition-colors"
+                  aria-haspopup="listbox"
+                  aria-expanded={dropdown.open}
+                  aria-controls={`${dropdown.label}-listbox`}
                 >
                   <span className="text-white/70">{dropdown.selected}</span>
                   <ChevronDown
                     size={16}
                     className={
-                      dropdown.open
-                        ? "rotate-180 text-[#d4af37]"
-                        : "text-white/70"
+                      dropdown.open ? "rotate-180 text-[#d4af37]" : "text-white/70"
                     }
                   />
                 </button>
@@ -194,6 +214,8 @@ const HeroSection = () => {
                 <AnimatePresence>
                   {dropdown.open && (
                     <motion.div
+                      id={`${dropdown.label}-listbox`}
+                      role="listbox"
                       initial={{ opacity: 0, scaleY: 0.95 }}
                       animate={{ opacity: 1, scaleY: 1 }}
                       exit={{ opacity: 0, scaleY: 0.95 }}
@@ -203,6 +225,8 @@ const HeroSection = () => {
                       {dropdown.options.map((item) => (
                         <button
                           key={item}
+                          role="option"
+                          type="button"
                           onClick={() => {
                             dropdown.setSelected(item);
                             dropdown.setOpen(false);
@@ -225,6 +249,7 @@ const HeroSection = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSearch}
                 className="group w-full flex items-center justify-center gap-3 px-6 py-3 text-[#0a0f1c] font-serif font-medium rounded-full overflow-hidden relative bg-[#d4af37]"
+                type="button"
               >
                 <span className="absolute inset-0 bg-[#0a0f1c] transition-transform duration-300 transform translate-y-full group-hover:translate-y-0 z-0"></span>
                 <span className="relative z-10 flex items-center gap-2 group-hover:text-white">
@@ -250,6 +275,7 @@ const HeroSection = () => {
                     key={property.id}
                     onClick={() => navigate(`/property/${property.id}`)}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                    type="button"
                   >
                     {property.title} - {property.location}
                   </button>

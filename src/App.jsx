@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
+import Preloader from './components/Preloader'; // ✅ import
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -19,6 +20,15 @@ import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <Preloader />;
+
   return (
     <>
       <ScrollToTop />
