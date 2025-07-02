@@ -3,6 +3,7 @@ import { Search, ChevronDown } from "lucide-react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import properties from "../data/properties";
+import locationCategories from "../data/locationOptions";
 
 const HeroSection = ({ loading }) => {
   const [activeTab, setActiveTab] = useState("General");
@@ -28,68 +29,77 @@ const HeroSection = ({ loading }) => {
   }, [handleScroll]);
 
   const handleSearch = useCallback(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) {
-      setSearchResults([]);
-      return;
-    }
-    const filtered = properties.filter(
-      (property) =>
-        property.title.toLowerCase().includes(query) ||
-        property.location.toLowerCase().includes(query)
-    );
+    const filtered = properties.filter((property) => {
+      const matchesCategory =
+        selectedCategory !== "Select Category" &&
+        property.category?.toLowerCase() === selectedCategory.toLowerCase();
+  
+      const matchesLocation =
+        selectedLocation !== "Select Location" &&
+        property.location?.toLowerCase().includes(selectedLocation.toLowerCase());
+  
+      return matchesCategory && matchesLocation;
+    });
+  
     setSearchResults(filtered);
-  }, [searchQuery]);
+  }, [selectedCategory, selectedLocation]);
+  
 
-  const dropdowns = [
-    {
-      open: categoryOpen,
-      setOpen: setCategoryOpen,
-      selected: selectedCategory,
-      setSelected: setSelectedCategory,
-      label: "Category",
-      options: ["Apartment", "Villa", "Office"],
+  const categoryOptions = Object.keys(locationCategories);
+
+const dropdowns = [
+  {
+    open: categoryOpen,
+    setOpen: setCategoryOpen,
+    selected: selectedCategory,
+    setSelected: (val) => {
+      setSelectedCategory(val);
+      setSelectedLocation("Select Location"); // reset on category change
     },
-    {
-      open: locationOpen,
-      setOpen: setLocationOpen,
-      selected: selectedLocation,
-      setSelected: setSelectedLocation,
-      label: "Location",
-      options: ["Lagos", "Abuja", "Port Harcourt"],
-    },
-  ];
+    label: "Category",
+    options: categoryOptions,
+  },
+  {
+    open: locationOpen,
+    setOpen: setLocationOpen,
+    selected: selectedLocation,
+    setSelected: setSelectedLocation,
+    label: "Location",
+    options:
+      selectedCategory && locationCategories[selectedCategory]
+        ? locationCategories[selectedCategory]
+        : [],
+  },
+];
 
   return (
     <section
       id="home"
       className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center text-white pt-40 pb-20 font-sans overflow-visible"
     >
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="fixed top-0 left-0 w-full h-full object-cover z-[-2] brightness-75"
-      >
-        <source src="/assets/1.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {/* Image Fallback for small screens (pure, no brightness or overlays) */}
+      {/* Static Background Image (full cover, no blur, no overlay) */}
+      <img
+        src="/assets/1.avif"
+        alt="Hero Background"
+        className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
+        loading="eager"
+      />
 
-      {/* Animated Overlay */}
+
+
       <motion.div
         animate={{
           background: [
-            "radial-gradient(circle, rgba(10,15,28,0.85) 0%, rgba(10,15,28,0.95) 100%)",
-            "radial-gradient(circle, rgba(10,15,28,0.9) 0%, rgba(10,15,28,0.98) 100%)",
-            "radial-gradient(circle, rgba(10,15,28,0.85) 0%, rgba(10,15,28,0.95) 100%)",
+            "radial-gradient(circle, rgba(10,15,28,0.2) 0%, rgba(10,15,28,0.4) 100%)",
+            "radial-gradient(circle, rgba(10,15,28,0.3) 0%, rgba(10,15,28,0.5) 100%)",
+            "radial-gradient(circle, rgba(10,15,28,0.2) 0%, rgba(10,15,28,0.4) 100%)",
           ],
         }}
-        transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         className="fixed inset-0 z-[-1]"
       />
+
 
       {/* Hero Content */}
       <div className="relative z-20 max-w-5xl mx-auto px-4 flex flex-col items-center text-center">
@@ -142,11 +152,10 @@ const HeroSection = ({ loading }) => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-2.5 rounded-full transition-all duration-300 relative ${
-                  activeTab === tab
+                className={`px-6 py-2.5 rounded-full transition-all duration-300 relative ${activeTab === tab
                     ? "bg-[#d4af37] text-[#0a0f1c] shadow-md"
                     : "bg-transparent text-white hover:bg-[#d4af37]/20"
-                }`}
+                  }`}
                 type="button"
               >
                 {activeTab === tab && (
@@ -180,82 +189,81 @@ const HeroSection = ({ loading }) => {
 
             {/* Dropdowns */}
             {dropdowns.map((dropdown, i) => (
-              <div key={i} className="flex flex-col w-full relative z-10">
-                <label
-                  className="mb-2 text-white/60 text-sm font-serif"
-                  htmlFor={`dropdown-${dropdown.label.toLowerCase()}`}
-                >
-                  {dropdown.label}
-                </label>
-                <button
-                  id={`dropdown-${dropdown.label.toLowerCase()}`}
-                  type="button"
-                  onClick={() => {
-                    setCategoryOpen(false);
-                    setLocationOpen(false);
-                    dropdown.setOpen(!dropdown.open);
-                  }}
-                  className="w-full flex justify-between items-center px-4 py-3 rounded bg-transparent text-white border border-white/20 hover:border-[#d4af37] transition-colors"
-                  aria-haspopup="listbox"
-                  aria-expanded={dropdown.open}
-                  aria-controls={`${dropdown.label}-listbox`}
-                >
-                  <span className="text-white/70">{dropdown.selected}</span>
-                  <ChevronDown
-                    size={16}
-                    className={
-                      dropdown.open ? "rotate-180 text-[#d4af37]" : "text-white/70"
-                    }
-                  />
-                </button>
+  <div key={i} className="flex flex-col w-full relative z-10">
+    <label
+      className="mb-2 text-white/60 text-sm font-serif"
+      htmlFor={`dropdown-${dropdown.label.toLowerCase()}`}
+    >
+      {dropdown.label}
+    </label>
+    <button
+      id={`dropdown-${dropdown.label.toLowerCase()}`}
+      type="button"
+      onClick={() => {
+        setCategoryOpen(false);
+        setLocationOpen(false);
+        dropdown.setOpen(!dropdown.open);
+      }}
+      className="w-full flex justify-between items-center px-4 py-3 rounded bg-transparent text-white border border-white/20 hover:border-[#d4af37] transition-colors"
+      aria-haspopup="listbox"
+      aria-expanded={dropdown.open}
+      aria-controls={`${dropdown.label}-listbox`}
+    >
+      <span className="text-white/70">{dropdown.selected}</span>
+      <ChevronDown
+        size={16}
+        className={dropdown.open ? "rotate-180 text-[#d4af37]" : "text-white/70"}
+      />
+    </button>
 
-                <AnimatePresence>
-                  {dropdown.open && (
-                    <motion.div
-                      id={`${dropdown.label}-listbox`}
-                      role="listbox"
-                      initial={{ opacity: 0, scaleY: 0.95 }}
-                      animate={{ opacity: 1, scaleY: 1 }}
-                      exit={{ opacity: 0, scaleY: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                      className="mt-2 bg-white text-[#0a0f1c] rounded shadow-lg border border-gray-200 origin-top w-full max-h-48 overflow-y-auto"
-                    >
-                      {dropdown.options.map((item) => (
-                        <button
-                          key={item}
-                          role="option"
-                          type="button"
-                          onClick={() => {
-                            dropdown.setSelected(item);
-                            dropdown.setOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
-                        >
-                          {item}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
+    <AnimatePresence>
+      {dropdown.open && (
+        <motion.div
+          id={`${dropdown.label}-listbox`}
+          role="listbox"
+          initial={{ opacity: 0, scaleY: 0.95 }}
+          animate={{ opacity: 1, scaleY: 1 }}
+          exit={{ opacity: 0, scaleY: 0.95 }}
+          transition={{ duration: 0.2 }}
+          className="absolute top-full left-0 mt-2 z-50 w-full bg-white text-[#0a0f1c] rounded shadow-lg border border-gray-200 origin-top max-h-60 overflow-y-auto"
+        >
+          {dropdown.options.map((item) => (
+            <button
+              key={item}
+              role="option"
+              type="button"
+              onClick={() => {
+                dropdown.setSelected(item);
+                dropdown.setOpen(false);
+              }}
+              className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+            >
+              {item}
+            </button>
+          ))}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+))}
 
-            {/* Search Button */}
-            <div className="flex items-end">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleSearch}
-                className="group w-full flex items-center justify-center gap-3 px-6 py-3 text-[#0a0f1c] font-serif font-medium rounded-full overflow-hidden relative bg-[#d4af37]"
-                type="button"
-              >
-                <span className="absolute inset-0 bg-[#0a0f1c] transition-transform duration-300 transform translate-y-full group-hover:translate-y-0 z-0"></span>
-                <span className="relative z-10 flex items-center gap-2 group-hover:text-white">
-                  <Search size={18} className="group-hover:rotate-12 transition-transform" />
-                  SEARCH
-                </span>
-              </motion.button>
-            </div>
+{/* Search Button */}
+<div className="flex items-end">
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={handleSearch}
+    className="group w-full flex items-center justify-center gap-3 px-6 py-3 text-[#0a0f1c] font-serif font-medium rounded-full overflow-hidden relative bg-[#d4af37]"
+    type="button"
+  >
+    <span className="absolute inset-0 bg-[#0a0f1c] transition-transform duration-300 transform translate-y-full group-hover:translate-y-0 z-0"></span>
+    <span className="relative z-10 flex items-center gap-2 group-hover:text-white">
+      <Search size={18} className="group-hover:rotate-12 transition-transform" />
+      SEARCH
+    </span>
+  </motion.button>
+</div>
+
           </div>
 
           {/* Search Results */}
