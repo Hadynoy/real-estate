@@ -102,18 +102,22 @@ const HeroSection = ({ loading }) => {
 
     {/* Video background only on large screens */}
     {isLargeScreen && (
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        key="hero-video"
-        className="w-full h-full object-cover absolute inset-0"
-      >
-        <source src="/assets/1.mp4" type="video/mp4" />
-      </video>
-    )}
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    preload="auto"
+    key="hero-video"
+    onCanPlayThrough={(e) => {
+      e.currentTarget.classList.add("fade-in");
+    }}
+    className="fixed top-0 left-0 w-full h-full object-cover z-[-2] opacity-0 transition-opacity duration-1000 fade-in-target"
+  >
+    <source src="/assets/1.mp4" type="video/mp4" />
+  </video>
+)}
+
   </div>
 
 

@@ -52,3 +52,9 @@ textarea,
   font-family: 'Cormorant Garamond', serif;
 }
 
+.fade-in-target {
+  opacity: 0;
+}
+.fade-in-target.fade-in {
+  opacity: 1;
+}
