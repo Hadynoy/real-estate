@@ -61,15 +61,16 @@ const CustomerTestimonial = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex flex-col lg:flex-row gap-20 items-start">
           <div className="flex-1">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 mb-6 text-center md:text-left">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 mb-6 text-center md:text-left w-full">
               <span className="w-8 h-px bg-[#d4af37]"></span>
-              <Home size={18} className="text-[#d4af37] animate-pulse" />
-              <span className="text-sm tracking-[0.2em] uppercase text-[#d4af37] font-medium whitespace-nowrap">
+              <Home size={18} className="text-[#d4af37] animate-pulse hidden md:inline-block" />
+              <span className="text-sm tracking-[0.2em] uppercase text-[#d4af37] font-medium whitespace-nowrap text-center">
                 Customer Testimonial
               </span>
-              <Home size={18} className="text-[#d4af37] animate-pulse" />
+              <Home size={18} className="text-[#d4af37] animate-pulse hidden md:inline-block" />
               <span className="w-8 h-px bg-[#d4af37]"></span>
             </div>
+
             <h2 className="text-5xl md:text-6xl font-serif text-white mb-8 tracking-tight">
               Hear From Happy <br />
               <span className="text-[#d4af37]">Homeowners</span>

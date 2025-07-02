@@ -177,9 +177,13 @@ const HighlightSection = React.memo(() => {
               </span>
             </button>
 
-            <button className="bg-[#d4af37] text-[#0a0f1c] px-6 py-3 rounded-full flex items-center gap-2 hover:bg-[#e6c55d] transition-all duration-300 hover:shadow-lg active:scale-95 font-serif font-medium">
-              <PhoneCall size={16} /> +208-6666-0112
-            </button>
+            <a
+              href="tel:+2348098986274"
+              className="bg-[#d4af37] text-[#0a0f1c] px-6 py-3 rounded-full flex items-center gap-2 hover:bg-[#e6c55d] transition-all duration-300 hover:shadow-lg active:scale-95 font-serif font-medium"
+            >
+              <PhoneCall size={16} /> +234 809 8986 274
+            </a>
+
           </div>
         </motion.div>
       </div>

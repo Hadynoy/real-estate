@@ -31,9 +31,10 @@ const PaginatedProperties = () => {
         <div className="flex items-center gap-4">
           <span className="w-8 h-px bg-[#d4af37]" />
           <Home size={20} className="text-[#d4af37] animate-pulse" />
-          <span className="text-base md:text-lg tracking-[0.25em] uppercase text-[#d4af37] font-bold font-serif">
-            Available Properties
-          </span>
+          <span className="text-sm sm:text-base md:text-lg text-center leading-snug tracking-[0.15em] md:tracking-[0.25em] uppercase text-[#d4af37] font-bold font-serif whitespace-nowrap">
+  Available Properties
+</span>
+
           <Home size={20} className="text-[#d4af37] animate-pulse" />
           <span className="w-8 h-px bg-[#d4af37]" />
         </div>

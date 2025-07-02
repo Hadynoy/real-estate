@@ -4,14 +4,20 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import properties from "../data/properties";
 import locationCategories from "../data/locationOptions";
+import MobileDropdownModal from "./MobileDropdownModal";
 
 const HeroSection = ({ loading }) => {
-
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const [mobileModal, setMobileModal] = useState({
+    open: false,
+    label: "",
+    options: [],
+    onSelect: () => {},
+  });
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsLargeScreen(window.innerWidth >= 1024); // Tailwind's 'lg' breakpoint is 1024px
+      setIsLargeScreen(window.innerWidth >= 1024);
     };
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
@@ -36,8 +42,13 @@ const HeroSection = ({ loading }) => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handleConditionalScroll = () => {
+      if (window.innerWidth >= 1024) {
+        handleScroll();
+      }
+    };
+    window.addEventListener("scroll", handleConditionalScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleConditionalScroll);
   }, [handleScroll]);
 
   const handleSearch = useCallback(() => {
@@ -56,7 +67,6 @@ const HeroSection = ({ loading }) => {
     setSearchResults(filtered);
   }, [selectedCategory, selectedLocation]);
 
-
   const categoryOptions = Object.keys(locationCategories);
 
   const dropdowns = [
@@ -66,7 +76,7 @@ const HeroSection = ({ loading }) => {
       selected: selectedCategory,
       setSelected: (val) => {
         setSelectedCategory(val);
-        setSelectedLocation("Select Location"); // reset on category change
+        setSelectedLocation("Select Location");
       },
       label: "Category",
       options: categoryOptions,
@@ -84,50 +94,42 @@ const HeroSection = ({ loading }) => {
     },
   ];
 
-
   return (
     <section
-  id="home"
-  className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center text-white pt-40 pb-20 font-sans overflow-visible"
->
-    {/* 🎯 Scoped Background Container */}
-    <div className="absolute inset-0 overflow-hidden z-[-2]">
-    {/* Blurred fallback image always visible */}
-    <img
-      src="/assets/1.avif"
-      alt="Hero Background Fallback"
-      className="w-full h-full object-cover blur-sm scale-105 absolute inset-0"
-      loading="eager"
-    />
+      id="home"
+      className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center text-white pt-40 pb-20 font-sans overflow-visible"
+    >
+      <div className="absolute inset-0 overflow-hidden z-[-2]">
+        <img
+          src="/assets/1.avif"
+          alt="Hero Background Fallback"
+          className="w-full h-full object-cover blur-sm scale-105 absolute inset-0"
+          loading="eager"
+        />
+        {isLargeScreen && (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            key="hero-video"
+            className="w-full h-full object-cover absolute inset-0"
+          >
+            <source src="/assets/1.mp4" type="video/mp4" />
+          </video>
+        )}
+      </div>
 
-    {/* Video background only on large screens */}
-    {isLargeScreen && (
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        key="hero-video"
-        className="w-full h-full object-cover absolute inset-0"
-      >
-        <source src="/assets/1.mp4" type="video/mp4" />
-      </video>
-    )}
-  </div>
+      {!isLargeScreen && (
+        <img
+          src="/assets/1.avif"
+          alt="Hero Background"
+          className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
+          loading="eager"
+        />
+      )}
 
-
-  {/* ✅ Still keep image for small screens as-is */}
-  {!isLargeScreen && (
-    <img
-      src="/assets/1.avif"
-      alt="Hero Background"
-      className="fixed top-0 left-0 w-full h-full object-cover z-[-2]"
-      loading="eager"
-    />
-  )}
-
-      {/* Overlay radial gradient */}
       <motion.div
         animate={{
           background: [
@@ -140,9 +142,6 @@ const HeroSection = ({ loading }) => {
         className="fixed inset-0 z-[-1]"
       />
 
-
-
-      {/* Hero Content */}
       <div className="relative z-20 max-w-5xl mx-auto px-4 flex flex-col items-center text-center">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -173,13 +172,11 @@ const HeroSection = ({ loading }) => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-lg text-white/80 font-serif max-w-2xl mb-12"
         >
-          Indulge in a luxurious hotel stay where comfort meets style,
-          offering world-class amenities, elegant design, and exceptional
-          personalized service.
+          Indulge in a luxurious home stay where comfort meets style,
+          offering world-class amenities, elegant design, and exceptional personalized service.
         </motion.p>
       </div>
 
-      {/* Search Filter */}
       <motion.div
         initial={{ y: 50, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : {}}
@@ -187,7 +184,6 @@ const HeroSection = ({ loading }) => {
         className="relative z-20 mt-8 px-4"
       >
         <div className="max-w-6xl mx-auto bg-white/10 backdrop-blur-xl border border-[#d4af37]/30 rounded-xl p-6 shadow-lg overflow-visible">
-          {/* Tabs */}
           <div className="flex justify-center gap-4 mb-8 text-sm font-serif flex-wrap">
             {["General", "Villa", "Apartment"].map((tab) => (
               <button
@@ -211,9 +207,7 @@ const HeroSection = ({ loading }) => {
             ))}
           </div>
 
-          {/* Input + Dropdowns */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-20 overflow-visible">
-            {/* Keyword */}
             <div className="flex flex-col">
               <label className="mb-2 text-white/60 text-sm font-serif" htmlFor="keyword-input">
                 Keyword
@@ -228,7 +222,6 @@ const HeroSection = ({ loading }) => {
               />
             </div>
 
-            {/* Dropdowns */}
             {dropdowns.map((dropdown, i) => (
               <div key={i} className="flex flex-col w-full relative z-10">
                 <label
@@ -237,28 +230,40 @@ const HeroSection = ({ loading }) => {
                 >
                   {dropdown.label}
                 </label>
+
                 <button
                   id={`dropdown-${dropdown.label.toLowerCase()}`}
                   type="button"
                   onClick={() => {
-                    setCategoryOpen(false);
-                    setLocationOpen(false);
-                    dropdown.setOpen(!dropdown.open);
+                    if (!isLargeScreen) {
+                      setMobileModal({
+                        open: true,
+                        label: dropdown.label,
+                        options: dropdown.options,
+                        onSelect: (val) => {
+                          dropdown.setSelected(val);
+                          if (dropdown.label === "Category") {
+                            setSelectedLocation("Select Location");
+                          }
+                        },
+                      });
+                    } else {
+                      setCategoryOpen(false);
+                      setLocationOpen(false);
+                      dropdown.setOpen(!dropdown.open);
+                    }
                   }}
                   className="w-full flex justify-between items-center px-4 py-3 rounded bg-transparent text-white border border-white/20 hover:border-[#d4af37] transition-colors"
-                  aria-haspopup="listbox"
-                  aria-expanded={dropdown.open}
-                  aria-controls={`${dropdown.label}-listbox`}
                 >
                   <span className="text-white/70">{dropdown.selected}</span>
                   <ChevronDown
                     size={16}
-                    className={dropdown.open ? "rotate-180 text-[#d4af37]" : "text-white/70"}
+                    className="text-white/70"
                   />
                 </button>
 
                 <AnimatePresence>
-                  {dropdown.open && (
+                  {dropdown.open && isLargeScreen && (
                     <motion.div
                       id={`${dropdown.label}-listbox`}
                       role="listbox"
@@ -288,7 +293,6 @@ const HeroSection = ({ loading }) => {
               </div>
             ))}
 
-            {/* Search Button */}
             <div className="flex items-end">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -304,10 +308,8 @@ const HeroSection = ({ loading }) => {
                 </span>
               </motion.button>
             </div>
-
           </div>
 
-          {/* Search Results */}
           <AnimatePresence>
             {searchResults.length > 0 && (
               <motion.div
@@ -332,6 +334,21 @@ const HeroSection = ({ loading }) => {
           </AnimatePresence>
         </div>
       </motion.div>
+
+      <MobileDropdownModal
+        isOpen={mobileModal.open}
+        label={mobileModal.label}
+        options={mobileModal.options}
+        onSelect={mobileModal.onSelect}
+        onClose={() =>
+          setMobileModal({
+            open: false,
+            label: "",
+            options: [],
+            onSelect: () => { },
+          })
+        }
+      />
     </section>
   );
 };

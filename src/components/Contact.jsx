@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
+import emailjs from 'emailjs-com'; 
+
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -30,15 +32,34 @@ const Contact = () => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
-      console.log('Form submitted:', formData);
-      setSubmitted(true);
-      setFormData({ fullName: '', email: '', message: '', phone: '' });
-      setErrors({});
-      setTimeout(() => setSubmitted(false), 3000);
+      const templateParams = {
+        from_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+      };
+  
+      emailjs
+        .send(
+          'service_rc44m5c',       
+          'template_rze9rqh',      
+          templateParams,
+          'aCwgI4IIKUzPOXyEE'      
+        )
+        .then(() => {
+          setSubmitted(true);
+          setFormData({ fullName: '', email: '', message: '', phone: '' });
+          setErrors({});
+          setTimeout(() => setSubmitted(false), 3000);
+        })
+        .catch((error) => {
+          console.error('EmailJS error:', error);
+        });
     } else {
       setErrors(formErrors);
     }
   };
+  
 
   return (
     <section id="contact" className="relative w-full bg-white py-32 overflow-hidden">
@@ -138,7 +159,7 @@ const Contact = () => {
                   value={formData.fullName}
                   onChange={handleChange}
                   placeholder="Full Name"
-                  className={`w-full bg-transparent border-b border-[#0a0f1c]/20 focus:border-[#d4af37] pb-4 text-[#0a0f1c] text-lg placeholder:text-[#0a0f1c]/40 transition-all duration-300 ${errors.fullName ? 'border-red-500' : ''}`}
+                  className={`w-full bg-transparent border-b border-[#0a0f1c]/20 focus:border-[#d4af37] focus:ring-0 focus:outline-none pb-4 text-[#0a0f1c] text-lg placeholder:text-[#0a0f1c]/40 transition-all duration-300 ${errors.fullName ? 'border-red-500' : ''}`}
                 />
                 {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
               </div>
@@ -150,7 +171,7 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Email Address"
-                  className={`w-full bg-transparent border-b border-[#0a0f1c]/20 focus:border-[#d4af37] pb-4 text-[#0a0f1c] text-lg placeholder:text-[#0a0f1c]/40 transition-all duration-300 ${errors.email ? 'border-red-500' : ''}`}
+                  className={`w-full bg-transparent border-b border-[#0a0f1c]/20 focus:border-[#d4af37] focus:ring-0 focus:outline-none pb-4 text-[#0a0f1c] text-lg placeholder:text-[#0a0f1c]/40 transition-all duration-300 ${errors.email ? 'border-red-500' : ''}`}
                 />
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
               </div>
@@ -162,7 +183,7 @@ const Contact = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Phone Number"
-                  className="w-full bg-transparent border-b border-[#0a0f1c]/20 focus:border-[#d4af37] pb-4 text-[#0a0f1c] text-lg placeholder:text-[#0a0f1c]/40 transition-all duration-300"
+                  className="w-full bg-transparent border-b border-[#0a0f1c]/20 focus:border-[#d4af37] focus:ring-0 focus:outline-none pb-4 text-[#0a0f1c] text-lg placeholder:text-[#0a0f1c]/40 transition-all duration-300"
                 />
               </div>
 
@@ -173,7 +194,7 @@ const Contact = () => {
                   onChange={handleChange}
                   rows="5"
                   placeholder="Your Message"
-                  className={`w-full bg-transparent border-b border-[#0a0f1c]/20 focus:border-[#d4af37] pb-4 text-[#0a0f1c] text-lg placeholder:text-[#0a0f1c]/40 transition-all duration-300 resize-none ${errors.message ? 'border-red-500' : ''}`}
+                  className={`w-full bg-transparent border-b border-[#0a0f1c]/20 focus:border-[#d4af37] focus:ring-0 focus:outline-none pb-4 text-[#0a0f1c] text-lg placeholder:text-[#0a0f1c]/40 transition-all duration-300 resize-none ${errors.message ? 'border-red-500' : ''}`}
                 ></textarea>
                 {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
               </div>
