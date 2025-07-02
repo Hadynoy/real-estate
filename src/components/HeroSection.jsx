@@ -151,7 +151,7 @@ const HeroSection = ({ loading }) => {
           className="flex items-center gap-3 mb-4 text-[#d4af37] font-serif font-medium tracking-widest text-sm uppercase"
         >
           <span className="inline-block w-8 h-0.5 bg-[#d4af37]" />
-          <span className="animate-pulse tracking-[0.2em]">SEARCH SMART. LIVE SMART</span>
+          <span className="animate-pulse tracking-[0.2em] font-bold">SEARCH SMART. LIVE SMART</span>
           <span className="inline-block w-8 h-0.5 bg-[#d4af37]" />
         </motion.div>
 
