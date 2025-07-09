@@ -134,13 +134,16 @@ const Navbar = () => {
             >
               <Search size={20} />
             </button>
-            <button className="group relative overflow-hidden flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-6 py-2.5 rounded-full font-medium tracking-wide transition-all duration-300">
-              <span className="absolute inset-0 bg-[#d4af37] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0"></span>
-              <span className="relative z-10 flex items-center gap-2 group-hover:text-white transition-colors">
-                <Home size={16} className="group-hover:rotate-12 transition-transform duration-300" />
-                Add Property
-              </span>
-            </button>
+            <Link
+      to="/sell"
+      className="group relative overflow-hidden flex items-center gap-2 border border-[#d4af37] text-[#d4af37] px-6 py-2.5 rounded-full font-medium tracking-wide transition-all duration-300"
+    >
+      <span className="absolute inset-0 bg-[#d4af37] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0"></span>
+      <span className="relative z-10 flex items-center gap-2 group-hover:text-white transition-colors">
+        <Home size={16} className="group-hover:rotate-12 transition-transform duration-300" />
+        Sell Property
+      </span>
+    </Link>
           </div>
 
           {/* Mobile Menu Toggle */}

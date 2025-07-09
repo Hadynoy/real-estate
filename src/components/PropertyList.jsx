@@ -71,7 +71,7 @@ const PropertyList = () => {
   );
 
   return (
-    <section className="relative bg-white py-16 overflow-hidden">
+    <section className="relative bg-[#0a0f1c]  py-16 overflow-hidden">
       {/* 💡 Glowing Background */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         {/* Top-left glow */}

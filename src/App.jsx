@@ -18,6 +18,7 @@ import Register from './pages/Register';
 import Blog from './pages/Blog';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+import SellProperty from './pages/SellProperty';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -50,6 +51,7 @@ const App = () => {
         <Route path="/services" element={<Layout><Services /></Layout>} />
         <Route path="/projects" element={<Layout><Projects /></Layout>} />
         <Route path="/register" element={<Layout><Register /></Layout>} />
+        <Route path="/sell" element={<Layout><SellProperty /></Layout>} />
 
         {/* Blog & Contact */}
         <Route path="/blog" element={<Layout><Blog /></Layout>} />
